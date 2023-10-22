@@ -29,6 +29,23 @@ app.get('/artists/:limit', async (req, res) => {
   }
 })
 
+app.get('/search/:query', async (req, res) => {
+  try {
+    const query = req.params.query
+    const responseTracks = await axios.get(`https://api.deezer.com/search/track?q=${query}&limit=5`)
+    const responseAlbums = await axios.get(`https://api.deezer.com/search/album?q=${query}&limit=5`)
+    const responseArtists = await axios.get(`https://api.deezer.com/search/artist?q=${query}&limit=5`)
+    res.status(200).json({
+      tracks: responseTracks,
+      albums: responseAlbums,
+      artists: responseArtists
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Erro ao buscar dados da API do Deezer.' })
+  }
+})
+
 // Inicie o servidor
 app.listen(port, () => {
   console.log(`Servidor está ouvindo na porta ${port}`)

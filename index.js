@@ -4,7 +4,7 @@ const express = require('express')
 const axios = require('axios')
 const cors = require('cors')
 const app = express()
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3002
 
 app.use(cors())
 
@@ -35,10 +35,11 @@ app.get('/search/:query', async (req, res) => {
     const responseTracks = await axios.get(`https://api.deezer.com/search/track?q=${query}&limit=5`)
     const responseAlbums = await axios.get(`https://api.deezer.com/search/album?q=${query}&limit=5`)
     const responseArtists = await axios.get(`https://api.deezer.com/search/artist?q=${query}&limit=5`)
+
     res.status(200).json({
-      tracks: responseTracks,
-      albums: responseAlbums,
-      artists: responseArtists
+      tracks: responseTracks.data.data,
+      albums: responseAlbums.data.data,
+      artists: responseArtists.data.data
     })
   } catch (error) {
     console.error(error)
